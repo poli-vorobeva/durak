@@ -1,42 +1,40 @@
-import React, { FC, useEffect, useState } from 'react';
-import { IGameStatus, IUser } from './interfaces';
-import { SocketModel } from './socketModel';
-import { AuthsView } from './auth';
-import { GameField } from './cardGame/cardField';
-export const App = () => <SocketApp />;
+import React, {FC, useEffect, useState} from 'react';
+import {IGameStatus, IUser} from './interfaces';
+import {SocketModel} from './socketModel';
+import {AuthsView} from './auth';
+import {GameField} from './cardGame/cardField';
+import {Provider, useDispatch, useSelector} from 'react-redux';
+import store, {ISocketData} from '../redux/store/store';
+import {LobbyComponent} from '../components/LobbyComponent';
+import {setMessages,setUsers,setCurrentUser,setStartedStatus,setGameStatus} from '../redux/actions'
+export const App = () => <Provider store={store}><SocketApp/></Provider>;
 
 // TODO: save auth
 // TODO: layout
 
 export const SocketApp = () => {
   const [websocket, setWebsocket] = useState<SocketModel>(null);
-  const [messages, setMessages] = useState<Array<IMessage>>([]);
-  const [users, setUsers] = useState<Array<IUser>>([]);
-  const [currentUser, setCurrentUser] = useState<IUser>(null);
-  const [gameStatus, setGameStatus] = useState<IGameStatus>(null);
-  const [isStarted, setIsStarted] = useState<boolean>(false);
-
+  const currentUser = useSelector((state:ISocketData) => state.socketData.currentUser)
+  const dispatch = useDispatch();
   useEffect(() => {
     const _websocket = new SocketModel();
     _websocket.onMessage = (text) => {
-      setMessages((prev) => {
-        return [...prev, { text: text }];
-      });
+      dispatch(setMessages(text))
     };
     _websocket.onUserList = (users) => {
-      setUsers(users);
+      dispatch(setUsers(users))
     };
     _websocket.onAuth = (user) => {
-      setCurrentUser(user);
+      dispatch(setCurrentUser(user))
     };
     _websocket.onJoin = () => {
-      setIsStarted(true);
+      dispatch(setStartedStatus(true));
     };
     _websocket.onGameStatus = (gameStatus) => {
-      setGameStatus(gameStatus);
+      dispatch(setGameStatus(gameStatus));
     };
     _websocket.onFinish = () => {
-      setIsStarted(false);
+      dispatch(setStartedStatus(false))
       console.log('finish');
     };
     setWebsocket(_websocket);
@@ -44,10 +42,6 @@ export const SocketApp = () => {
       _websocket.destroy();
     };
   }, []);
-
-  function handlClick() {
-    websocket.sendMessage('Done');
-  }
 
   return (
     <div>
@@ -59,38 +53,7 @@ export const SocketApp = () => {
         />
       )}
       {currentUser && (
-        <>
-          <button onClick={handlClick}>Send</button>
-          <UserList users={users} />
-          <div className="messages">
-            {messages.map((message) => (
-              <MessageView {...message} />
-            ))}
-          </div>
-          <input className="input" />
-          {!isStarted && <button onClick={() => websocket.join()}>join</button>}
-          {gameStatus && isStarted && (
-            <GameField
-              data={gameStatus}
-              onAction={(card, actionCard) => {
-                const myPlayerIndex = gameStatus.players.findIndex(
-                  (player) => currentUser.userName === player.user
-                );
-                if (
-                  myPlayerIndex ===
-                  (gameStatus.currentPlayerIndex + 1) %
-                  gameStatus.players.length
-                ) {
-                  websocket.defend(actionCard, card);
-                } else {
-                  websocket.attack(card);
-                }
-              }}
-              onTurn={() => websocket.turn()}
-              onEpicFail={() => websocket.epicFail()}
-            />
-          )}
-        </>
+        <LobbyComponent websocket={websocket}/>
       )}
     </div>
   );
@@ -100,7 +63,7 @@ interface IMessage {
   text: string;
 }
 
-export const UserList: FC<{ users: Array<IUser> }> = ({ users }) => {
+export const UserList: FC<{users: Array<IUser>}> = ({users}) => {
   return (
     <>
       {users.map((user) => (
@@ -110,10 +73,10 @@ export const UserList: FC<{ users: Array<IUser> }> = ({ users }) => {
   );
 };
 
-export const UserView: FC<IUser> = ({ userName }) => {
+export const UserView: FC<IUser> = ({userName}) => {
   return <div className="user">{userName}</div>;
 };
 
-export const MessageView: FC<IMessage> = ({ text }) => {
+export const MessageView: FC<IMessage> = ({text}) => {
   return <div className="message">{text}</div>;
 };
