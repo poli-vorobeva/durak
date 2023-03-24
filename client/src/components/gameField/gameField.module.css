@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+}
+.gamefield_actions {
+  display: flex;
+  justify-content: center;
+  min-height: 210px;
+}
+.gamefield_action_slot {
+  position: relative;
+  padding: 30px;
+}
+
+.gamefield_card_attack {
+  position: absolute;
+}
+
+.gamefield_card_defend {
+  transform: rotateZ(30deg);
+}
+
+
+
+.gamefield_top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.gamefield_player {
+  display: flex;
+  justify-content: center;
+}

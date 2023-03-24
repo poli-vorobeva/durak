@@ -1,0 +1,102 @@
+
+.gamefield_deck {
+    display: flex;
+    padding: 5px;
+    padding-right: 110px;
+    margin: 5px;
+}
+
+.gamefield_deck_slot {
+    width: 10px;
+}
+
+.gamefield_card {
+    height: 150px;
+    width: 100px;
+    background-image: url('../../../assets/cards.png');
+    background-size: calc(100% * 13) calc(100% * 5);
+    background-position: calc(100% * 5) calc(100% * 2);
+}
+
+.gamefield_card_closed {
+    background-position: calc(100% * 11) calc(100% * 1);
+}
+
+.gamefield_card_closed {
+    background-position: calc(100% * 11) calc(100% * 1);
+}
+
+.gamefield_card_trump {
+    background-position: calc(100% * 11) calc(100% * 2);
+    transform: rotateZ(90deg);
+    z-index: -1;
+    position: relative;
+}
+
+.gamefield_hand {
+    padding: 30px;
+    display: flex;
+}
+.gamefield_hand_slot {
+    position: relative;
+    padding: 0px;
+    width: 30px;
+}
+.gamefield_card:hover {
+    background-blend-mode: darken;
+    background-color: rgba(0, 0, 0, 0.09);
+}
+.gamefield_deck_trump {
+    margin-left: 10px;
+}
+
+
+.gamefield_enemy_hand {
+    padding: 10px;
+    display: flex;
+}
+.gamefield_enemy_hand_slot {
+    position: relative;
+    padding: 0px;
+    width: 15px;
+}
+
+.gamefield_enemy_hand_card {
+    height: 90px;
+    width: 60px;
+    background-position: calc(100% * 11) calc(100% * 1);
+}
+
+.gamefield_enemy_avatar {
+    border: solid 1px #000;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamefield_enemy_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamefield_enemy_nick {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.gamefield_enemies {
+    display: flex;
+}
+
+.gamefield_enemy {
+    background-color: #aaa;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+}
