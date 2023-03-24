@@ -100,3 +100,21 @@
     border-radius: 10px;
     margin: 5px;
 }
+
+.gamefield_actions {
+    display: flex;
+    justify-content: center;
+    min-height: 210px;
+}
+.gamefield_action_slot {
+    position: relative;
+    padding: 30px;
+}
+
+.gamefield_card_attack {
+    position: absolute;
+}
+
+.gamefield_card_defend {
+    transform: rotateZ(30deg);
+}

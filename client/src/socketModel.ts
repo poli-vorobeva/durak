@@ -21,7 +21,6 @@ export class SocketModel {
     const _websocket = new window.WebSocket('ws://localhost:3000/');
 
     _websocket.onopen = () => {
-      console.log('OPENNEW');
       this.websocket = _websocket;
     };
 
@@ -78,7 +77,6 @@ export class SocketModel {
   }
 
   join() {
-    console.log('join');
     this.sendRequest('join', '');
   }
 

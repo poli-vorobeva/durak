@@ -1,13 +1,20 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IGameStatus} from '../../interfaces';
+import {ICard, IGameStatus} from '../../interfaces';
 
 export interface IGameState {
   isStarted: boolean;
   gameStatus: IGameStatus;
+  count: number;
+  trumpCard: ICard;
 }
 const gameInitialState: IGameState = {
   isStarted: false,
   gameStatus: null,
+  count: null,
+  trumpCard: {
+    value: null,
+    suit: null,
+  },
 };
 export const gameReducer = createSlice({
   name: 'gameData',
@@ -18,6 +25,8 @@ export const gameReducer = createSlice({
     },
     setGameStatus(state: IGameState, action: PayloadAction<IGameStatus>) {
       state.gameStatus = action.payload;
+      state.count = action.payload.cardsCountInStack;
+      state.trumpCard = action.payload.trumpCard;
     },
   },
 });

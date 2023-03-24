@@ -1,14 +1,11 @@
 import React from 'react';
 import {ICard} from '../../../interfaces';
 import actionStyles from './fieldComponents.module.css';
+import {useSelector} from 'react-redux';
+import {IGameData} from '../../../redux/store/store';
 
-export const Actions = ({
-  cardsInAction,
-  onSelect,
-}: {
-  cardsInAction: Array<{attack: ICard; defend: ICard}>;
-  onSelect: (card: ICard) => void;
-}) => {
+export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
+  const cardsInAction = useSelector((state: IGameData) => state.gameData.gameStatus.actionCards);
   return (
     <div className={actionStyles.gamefield_actions}>
       {cardsInAction.map((action) => {
@@ -24,7 +21,7 @@ export const Actions = ({
                 })`,
               }}
               className={`${actionStyles.gamefield_card} ${actionStyles.gamefield_card_attack}`}
-            ></div>
+            />
             {action.defend && (
               <div
                 className={`${actionStyles.gamefield_card} ${actionStyles.gamefield_card_defend}`}
@@ -33,7 +30,7 @@ export const Actions = ({
                     action.defend.suit
                   })`,
                 }}
-              ></div>
+              />
             )}
           </div>
         );

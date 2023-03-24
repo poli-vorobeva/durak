@@ -2,19 +2,19 @@ import {ICard} from '../../../interfaces';
 import {MyCards} from './MyCards';
 import * as React from 'react';
 import myStyles from './fieldComponents.module.css';
+import {useSelector} from 'react-redux';
+import {IGameData} from '../../../redux/store/store';
 
 export const MyPlayer = ({
-  cards,
   onAction,
   onTurn,
   onEpicFail,
 }: {
-  cards: Array<ICard>;
   onAction: (card: ICard) => void;
   onTurn: () => void;
   onEpicFail: () => void;
 }) => {
-  console.log(cards, '#$$');
+  const cards = useSelector((state: IGameData) => state.gameData.gameStatus.playerCards);
   return (
     <div className={myStyles.gamefield_player}>
       <MyCards

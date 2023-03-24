@@ -2,15 +2,12 @@ import {GameField} from './gameField/gameField';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {IGameData, ISocketData} from '../redux/store/store';
-import {UserList} from './UserList';
-import {Messages} from '../UI/Messages';
 import {SocketModel} from '../socketModel';
-import {IGameStatus} from '../interfaces';
+import {LobbyFrom} from './LobbyForm';
 export interface IMessage {
   text: string;
 }
 export const LobbyComponent = ({websocket}: {websocket: SocketModel}) => {
-  console.log(websocket, '^^^WEBS');
   const messages = useSelector((state: ISocketData) => state.socketData.messages);
   const users = useSelector((state: ISocketData) => state.socketData.users);
   const gameStatus = useSelector((state: IGameData) => state.gameData.gameStatus);
@@ -22,14 +19,14 @@ export const LobbyComponent = ({websocket}: {websocket: SocketModel}) => {
   }
   return (
     <>
-      <button onClick={handlClick}>Send</button>
-      <UserList users={users} />
-      <Messages messages={messages} />
-      <input className="input" />
-      {!isStarted && <button onClick={() => websocket.join()}>join</button>}
+      {!isStarted && (
+        <>
+          <LobbyFrom onClick={() => handlClick()} users={users} messages={messages} />
+          <button onClick={() => websocket.join()}>join</button>
+        </>
+      )}
       {gameStatus && isStarted && (
         <GameField
-          data={gameStatus}
           onAction={(card, actionCard) => {
             const myPlayerIndex = gameStatus.players.findIndex(
               (player) => currentUser.userName === player.user,
