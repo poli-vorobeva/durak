@@ -1,8 +1,9 @@
-import React, {useEffect, useMemo} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import {IGameData} from '../../../redux/store/store';
 import deskStyles from './fieldComponents.module.css';
 import {Card} from './Card';
+
 export const Deck = () => {
   const count = useSelector((state: IGameData) => state.gameData.cardsCountInStack);
 
@@ -17,9 +18,4 @@ export const Deck = () => {
       })}
     </div>
   );
-
-  // <div>
-  //   <div>{count.toString()}</div>
-  //   <div>{trumpCard.value.toString() + ' ' + trumpCard.suit.toString()}</div>
-  // </div>
 };
