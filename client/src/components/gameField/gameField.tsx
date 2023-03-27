@@ -18,7 +18,7 @@ interface IGameFieldProps {
 export const GameField = ({onAction, onTurn, onEpicFail}: IGameFieldProps) => {
   const [selectedCard, setSelectedCard] = useState<ICard>(null);
   console.log('GAMEFILE----rrr');
-  const count = useSelector((state: IGameData) => state.gameData.cardsCountInStack);
+  // const count = useSelector((state: IGameData) => state.gameData.cardsCountInStack);
   return (
     <div>
       <div className={gameFieldStyles.gamefield_top}>
@@ -27,7 +27,7 @@ export const GameField = ({onAction, onTurn, onEpicFail}: IGameFieldProps) => {
       </div>
       <Actions
         onSelect={(card) => {
-          setSelectedCard(card);
+          setSelectedCard(() => card);
         }}
       />
       <MyPlayer
