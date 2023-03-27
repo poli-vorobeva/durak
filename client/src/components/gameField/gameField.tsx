@@ -17,27 +17,27 @@ interface IGameFieldProps {
 }
 export const GameField = ({onAction, onTurn, onEpicFail}: IGameFieldProps) => {
   const [selectedCard, setSelectedCard] = useState<ICard>(null);
-  console.log('GAMEFILE----rrr');
-  // const count = useSelector((state: IGameData) => state.gameData.cardsCountInStack);
   return (
-    <div>
-      <div className={gameFieldStyles.gamefield_top}>
+    <>
+      <div className={gameFieldStyles.gamefield_board}>
         <Deck />
-        <EnemySection />
+        <Actions
+          onSelect={(card) => {
+            setSelectedCard(() => card);
+          }}
+        />
       </div>
-      <Actions
-        onSelect={(card) => {
-          setSelectedCard(() => card);
-        }}
-      />
-      <MyPlayer
-        onAction={(card) => {
-          onAction(card, selectedCard);
-        }}
-        onTurn={() => onTurn()}
-        onEpicFail={() => onEpicFail()}
-      />
-    </div>
+      <div className={gameFieldStyles.gamefield_players}>
+        <EnemySection />
+        <MyPlayer
+          onAction={(card) => {
+            onAction(card, selectedCard);
+          }}
+          onTurn={() => onTurn()}
+          onEpicFail={() => onEpicFail()}
+        />
+      </div>
+    </>
   );
 };
 

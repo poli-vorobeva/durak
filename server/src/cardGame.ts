@@ -6,7 +6,7 @@
 // TODO: change naming
 // TODO: rooms for diferent games
 
-import {ICard, IGameStatus, IUser} from "./socketServerInterface";
+import { ICard, IGameStatus, IUser } from "./socketServerInterface";
 import Signal from "./Singal";
 
 export class Durak {
@@ -19,10 +19,9 @@ export class Durak {
   public cardsInAction: Array<{ attack: Card; defend: Card }> = [];
   public trumpCard: Card = null;
   public onFinish: () => void;
-  public onGameStatus: Signal<void> = new Signal()
+  public onGameStatus: Signal<void> = new Signal();
 
-  constructor() {
-  }
+  constructor() {}
 
   createCards() {
     let cards: Array<Card> = [];
@@ -52,7 +51,7 @@ export class Durak {
     this.trump = trumpCard.suit;
     this.cards.unshift(trumpCard);
     this.processCards();
-    this.onGameStatus.emit(null)
+    this.onGameStatus.emit(null);
   }
 
   joinUser(user: IUser) {
@@ -96,7 +95,7 @@ export class Durak {
 
       this.processCards();
     }
-    this.onGameStatus.emit(null)
+    this.onGameStatus.emit(null);
   }
 
   epicFail(userName: string) {
@@ -116,7 +115,7 @@ export class Durak {
 
     this.cardsInAction = [];
     this.processCards();
-    this.onGameStatus.emit(null)
+    this.onGameStatus.emit(null);
   }
 
   takeCardFrom(player: Player, card: Card) {
@@ -125,7 +124,7 @@ export class Durak {
 
   setCardToAction(player: Player, card: Card) {
     player.cards = this.takeCardFrom(player, card);
-    this.cardsInAction.push({attack: card, defend: null});
+    this.cardsInAction.push({ attack: card, defend: null });
   }
 
   attack(player: Player, card: Card) {
@@ -141,7 +140,7 @@ export class Durak {
         this.setCardToAction(player, card);
       }
     }
-    this.onGameStatus.emit(null)
+    this.onGameStatus.emit(null);
   }
 
   defend(player: Player, card: Card, attackCard: Card) {
@@ -149,19 +148,21 @@ export class Durak {
       if (card.compare(attackCard, this.trump, this.maxCardPower)) {
         player.cards = this.takeCardFrom(player, card);
 
-        const currentAction = this.cardsInAction.find(
-          (action) => action.attack.isEqual(attackCard)
+        const currentAction = this.cardsInAction.find((action) =>
+          action.attack.isEqual(attackCard)
         );
         currentAction.defend = card;
       }
     }
-    this.onGameStatus.emit(null)
+    this.onGameStatus.emit(null);
   }
 
   getGameStatus(userName: string) {
-    const player = this.getPlayerByName(userName)
+    const player = this.getPlayerByName(userName);
+    // console.log(player, "-------+++++++++++++++++++THISpalys");
     const gameStatus: IGameStatus = {
       players: this.players.map((player) => {
+        // console.log(player, "---!!!!", player.cards, "!!!!!!!!!~~~~~~~~~");
         return {
           user: player.userName,
           cardsCount: player.cards.length,
@@ -178,12 +179,10 @@ export class Durak {
       }),
       currentPlayerIndex: this.currentPlayerIndex,
     };
-    return gameStatus
+    return gameStatus;
   }
 
-  insertPlayerCard() {
-
-  }
+  insertPlayerCard() {}
 
   getPlayers() {
     return this.players.length;
@@ -207,11 +206,19 @@ export class Durak {
     this.players = [];
     this.isStarted = false;
     this.onFinish();
+    this.cardsInAction = [];
+  }
+
+  disconnectPlayer() {
+    this.isStarted = false;
+    this.players = [];
+
+    this.cardsInAction = [];
   }
 }
 
 class Player {
-  public userName: string = '';
+  public userName: string = "";
   public cards: Array<Card> = [];
 
   constructor(userName: string) {
@@ -230,8 +237,10 @@ export class Card {
 
   compare(attackCard: Card, trump: number, maxCardPower: number) {
     if (attackCard.suit != this.suit && this.suit != trump) return false;
-    console.log(attackCard.getTotal(trump, maxCardPower) + ' ON ' + this.getTotal(trump, maxCardPower));
-    return attackCard.getTotal(trump, maxCardPower) < this.getTotal(trump, maxCardPower);
+    return (
+      attackCard.getTotal(trump, maxCardPower) <
+      this.getTotal(trump, maxCardPower)
+    );
   }
 
   isEqual(card: ICard) {

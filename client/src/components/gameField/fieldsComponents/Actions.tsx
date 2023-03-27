@@ -3,9 +3,9 @@ import {ICard} from '../../../interfaces';
 import actionStyles from './fieldComponents.module.css';
 import {useSelector} from 'react-redux';
 import {IGameData} from '../../../redux/store/store';
+import {ActionCard} from './ActionCard';
 
 export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
-  console.log('actionsCard');
   const cardsInAction = useSelector((state: IGameData) => state.gameData.actionCards);
 
   return (
@@ -13,26 +13,16 @@ export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
       {cardsInAction.map((action) => {
         return (
           <div className={actionStyles.gamefield_action_slot}>
-            <div
-              onClick={() => {
+            <ActionCard
+              clickHandler={() => {
                 onSelect(action.attack);
               }}
-              style={{
-                backgroundPosition: `calc(-100% * ${action.attack.value - 1}) calc(-100% * ${
-                  action.attack.suit
-                })`,
-              }}
-              className={`${actionStyles.gamefield_card} ${actionStyles.gamefield_card_attack}`}
+              value={action.attack.value}
+              action={'attack'}
+              suit={action.attack.suit}
             />
             {action.defend && (
-              <div
-                className={`${actionStyles.gamefield_card} ${actionStyles.gamefield_card_defend}`}
-                style={{
-                  backgroundPosition: `calc(-100% * ${action.defend.value - 1}) calc(-100% * ${
-                    action.defend.suit
-                  })`,
-                }}
-              />
+              <ActionCard value={action.defend.value} action={'defend'} suit={action.defend.suit} />
             )}
           </div>
         );

@@ -3,7 +3,7 @@
 }
 .gamefield_actions{
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 .gamefield_card{
   height: 150px;
