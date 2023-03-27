@@ -5,7 +5,9 @@ import {useSelector} from 'react-redux';
 import {IGameData} from '../../../redux/store/store';
 
 export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
-  const cardsInAction = useSelector((state: IGameData) => state.gameData.gameStatus.actionCards);
+  console.log('actionsCard');
+  const cardsInAction = useSelector((state: IGameData) => state.gameData.actionCards);
+
   return (
     <div className={actionStyles.gamefield_actions}>
       {cardsInAction.map((action) => {

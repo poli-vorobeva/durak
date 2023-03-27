@@ -6,7 +6,7 @@ import {IGameData} from '../../../redux/store/store';
 import deskStyles from './fieldComponents.module.css';
 export const Deck = () => {
   console.log('DESK');
-  const count = useSelector((state: IGameData) => state.gameData.count);
+  const count = useSelector((state: IGameData) => state.gameData.cardsCountInStack);
   const trumpCard = useSelector((state: IGameData) => state.gameData.trumpCard);
   const memoDesk = useMemo(() => {
     return (

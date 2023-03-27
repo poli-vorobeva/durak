@@ -14,7 +14,7 @@ export const MyPlayer = ({
   onTurn: () => void;
   onEpicFail: () => void;
 }) => {
-  const cards = useSelector((state: IGameData) => state.gameData.gameStatus.playerCards);
+  const cards = useSelector((state: IGameData) => state.gameData.playerCards);
   return (
     <div className={myStyles.gamefield_player}>
       <MyCards

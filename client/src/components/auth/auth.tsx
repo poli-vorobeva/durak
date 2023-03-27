@@ -18,7 +18,7 @@ export const AuthsView = ({onUserAuth}: {onUserAuth: (user: IUser) => void}) => 
         />
         <button
           onClick={() => {
-            const user: IUser = {userName: userName};
+            const user: IUser = {userName};
             onUserAuth(user);
           }}
         >

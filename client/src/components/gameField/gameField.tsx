@@ -18,14 +18,11 @@ interface IGameFieldProps {
 export const GameField = ({onAction, onTurn, onEpicFail}: IGameFieldProps) => {
   const [selectedCard, setSelectedCard] = useState<ICard>(null);
   console.log('GAMEFILE----rrr');
-  const count = useSelector((state: IGameData) => state.gameData.count);
-  const memoDesk = useMemo(() => {
-    return <Deck />;
-  }, [count]);
+  const count = useSelector((state: IGameData) => state.gameData.cardsCountInStack);
   return (
     <div>
       <div className={gameFieldStyles.gamefield_top}>
-        {memoDesk}
+        <Deck />
         <EnemySection />
       </div>
       <Actions
