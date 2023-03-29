@@ -9,4 +9,4 @@ export const {
   setActionCards,
   setPlayerCards,
 } = gameReducer.actions;
-export const {setCurrentUser, setUsers, setMessages} = socketReducer.actions;
+export const {setCurrentUser, setUsers, setMessages,setRooms} = socketReducer.actions;

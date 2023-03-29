@@ -5,13 +5,13 @@ import {
   IServerResponseMessage,
   IUser,
 } from './interfaces';
-import {Dispatch} from 'react';
+import { Dispatch } from 'react';
 import {
   setCurrentUser,
   setGameStatus,
   setMessages,
   setStartedStatus,
-  setUsers,
+  setUsers, setRooms,
 } from './redux/actions';
 
 export class SocketModel {
@@ -34,7 +34,9 @@ export class SocketModel {
         const users: Array<IUser> = JSON.parse(response.content);
         dispatch(setUsers(users));
       }
-
+      if (response.type === 'updateRooms') {
+        dispatch(setRooms(JSON.parse(response.content)));
+      }
       if (response.type === 'auth') {
         const user: IUser = JSON.parse(response.content);
         dispatch(setCurrentUser(user));
@@ -55,9 +57,12 @@ export class SocketModel {
       }
     };
 
-    _websocket.onerror = () => {};
-    _websocket.onclose = () => {};
+    _websocket.onerror = () => {
+    };
+    _websocket.onclose = () => {
+    };
   }
+
   destroy() {
     if (this.websocket == null) return;
     this.websocket.onclose = null;
@@ -82,7 +87,7 @@ export class SocketModel {
 
   attack(card: ICard) {
     console.log('ATT');
-    this.sendRequest('attack', JSON.stringify({attackCard: card}));
+    this.sendRequest('attack', JSON.stringify({ attackCard: card }));
   }
 
   defend(attackCard: ICard, defendCard: ICard) {
@@ -105,6 +110,15 @@ export class SocketModel {
     const request: IServerRequestMessage = {
       type: type,
       content: stringContenrt,
+    };
+
+    this.websocket.send(JSON.stringify(request));
+  }
+
+  createRoom(currentUser: string) {
+    const request: IServerRequestMessage = {
+      type: 'createRoom',
+      content: currentUser,
     };
 
     this.websocket.send(JSON.stringify(request));
