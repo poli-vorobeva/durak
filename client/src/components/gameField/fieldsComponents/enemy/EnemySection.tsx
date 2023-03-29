@@ -1,14 +1,11 @@
 import {EnemyPlayer} from './EnemyPlayer';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
-import {IGameData, ISocketData} from '../../../redux/store/store';
-
-import enemyStyles from './fieldComponents.module.css';
+import {IGameData, ISocketData} from '../../../../redux/store/store';
+import enemyStyles from './enemy.module.css';
 
 export const EnemySection = () => {
-  console.log('enemySection');
   const currentUser = useSelector((state: ISocketData) => state.socketData.currentUser);
-
   const enemies = useSelector((state: IGameData) => state.gameData.players);
   return (
     <div className={enemyStyles.gamefield_enemies}>

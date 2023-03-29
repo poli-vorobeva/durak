@@ -1,0 +1,50 @@
+
+.gamefield_enemy_hand {
+    padding: 10px;
+    display: flex;
+}
+.gamefield_enemy_hand_slot {
+    position: relative;
+    padding: 0px;
+    width: 15px;
+}
+
+.gamefield_enemy_hand_card {
+    height: 90px;
+    width: 60px;
+    background-position: calc(100% * 11) calc(100% * 1);
+}
+
+.gamefield_enemy_avatar {
+    border: solid 1px #000;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamefield_enemy_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamefield_enemy_nick {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.gamefield_enemies {
+    display: flex;
+}
+
+.gamefield_enemy {
+    background-color: #aaa;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+}

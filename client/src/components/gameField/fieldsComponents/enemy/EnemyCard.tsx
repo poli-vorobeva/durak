@@ -1,5 +1,5 @@
-import enemyStyles from './fieldComponents.module.css';
 import * as React from 'react';
+import enemyStyles from './enemy.module.css';
 
 export const EnemyCard = ({idx, cardsCount}: {idx: number; cardsCount: number}) => {
   return (
