@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {IGameData} from '../../../redux/store/store';
 import {ActionCard} from './ActionCard';
 
-export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
+export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}):JSX.Element => {
   const cardsInAction = useSelector((state: IGameData) => state.gameData.actionCards);
 
   return (
