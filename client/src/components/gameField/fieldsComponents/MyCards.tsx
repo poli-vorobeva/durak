@@ -13,7 +13,7 @@ export const MyCards = ({
     <div className={deskStyles.gamefield_hand}>
       {cards.map((card, index) => {
         return (
-          <div className={deskStyles.gamefield_hand_slot}>
+          <div key={index} className={deskStyles.gamefield_hand_slot}>
             <div
               className={deskStyles.gamefield_card}
               style={{

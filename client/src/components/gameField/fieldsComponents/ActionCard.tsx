@@ -23,7 +23,7 @@ export const ActionCard = ({
 
   return (
     <div
-      onClick={!!clickHandler && clickHandler}
+      onClick={!!clickHandler ? clickHandler:null}
       style={cardPositionStyle(value, suit)}
       className={cardPositionClassName(action)}
     />

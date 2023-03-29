@@ -11,7 +11,7 @@ export const Deck = () => {
     <div className={deskStyles.gamefield_deck}>
       {new Array(count).fill(0).map((_, index) => {
         return (
-          <div className={deskStyles.gamefield_deck_slot}>
+          <div key={index} className={deskStyles.gamefield_deck_slot}>
            <Card isDeskTrump={!(index !== count - 1)} />
           </div>
         );

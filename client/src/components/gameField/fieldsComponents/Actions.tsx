@@ -10,9 +10,9 @@ export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
 
   return (
     <div className={actionStyles.gamefield_actions}>
-      {cardsInAction.map((action) => {
+      {cardsInAction.map((action,indx) => {
         return (
-          <div className={actionStyles.gamefield_action_slot}>
+          <div className={actionStyles.gamefield_action_slot} key={indx}>
             <ActionCard
               clickHandler={() => {
                 onSelect(action.attack);
