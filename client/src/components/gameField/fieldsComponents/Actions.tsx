@@ -5,14 +5,14 @@ import {useSelector} from 'react-redux';
 import {IGameData} from '../../../redux/store/store';
 import {ActionCard} from './ActionCard';
 
-export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}) => {
+export const Actions = ({onSelect}: {onSelect: (card: ICard) => void}):JSX.Element => {
   const cardsInAction = useSelector((state: IGameData) => state.gameData.actionCards);
 
   return (
     <div className={actionStyles.gamefield_actions}>
-      {cardsInAction.map((action) => {
+      {cardsInAction.map((action,indx) => {
         return (
-          <div className={actionStyles.gamefield_action_slot}>
+          <div className={actionStyles.gamefield_action_slot} key={indx}>
             <ActionCard
               clickHandler={() => {
                 onSelect(action.attack);

@@ -9,11 +9,6 @@
     width: 15px;
 }
 
-.gamefield_enemy_hand_card {
-    height: 90px;
-    width: 60px;
-    background-position: calc(100% * 11) calc(100% * 1);
-}
 
 .gamefield_enemy_avatar {
     border: solid 1px #000;
@@ -47,4 +42,18 @@
     padding: 10px;
     border-radius: 10px;
     margin: 5px;
+}
+
+.gamefield_card {
+    height: 150px;
+    width: 100px;
+    background-image: url('../../../../assets/cards.png');
+    background-size: calc(100% * 13) calc(100% * 5);
+    background-position: calc(100% * 5) calc(100% * 2);
+}
+
+.gamefield_enemy_hand_card {
+    height: 90px;
+    width: 60px;
+    background-position: calc(100% * 11) calc(100% * 1);
 }

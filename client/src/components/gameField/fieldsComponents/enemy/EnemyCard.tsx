@@ -1,7 +1,7 @@
 import * as React from 'react';
 import enemyStyles from './enemy.module.css';
 
-export const EnemyCard = ({idx, cardsCount}: {idx: number; cardsCount: number}) => {
+export const EnemyCard = ({idx, cardsCount}: {idx: number; cardsCount: number}):JSX.Element => {
   return (
     <div className={enemyStyles.gamefield_enemy_hand_slot}>
       <div
