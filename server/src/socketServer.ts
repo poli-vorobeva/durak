@@ -1,18 +1,18 @@
-import {connection, IUtf8Message} from "websocket";
+import { connection, IUtf8Message } from "websocket";
 import {
   IAttackParams,
   IAuthorisedUser,
   IGameStatus,
   IServerRequestMessage,
-  IServerResponseMessage
+  IServerResponseMessage,
 } from "./socketServerInterface";
 import * as http from "http";
-import {IDefendParams, IUser} from "../../client/src/interfaces";
-import {Durak} from "./cardGame";
-import {PlayerController} from "./playerController";
-import {BotController} from "./BotController";
+import { IDefendParams, IUser } from "../../client/src/interfaces";
+import { Durak } from "./cardGame";
+import { PlayerController } from "./playerController";
+import { BotController } from "./BotController";
 
-const websocket = require('websocket')
+const websocket = require("websocket");
 
 export class SocketService {
   game: Durak;
@@ -25,53 +25,51 @@ export class SocketService {
     });
     this.game = new Durak();
 
-    wsServer.on('request', (request) => {
+    wsServer.on("request", (request) => {
       const connection = request.accept(undefined, request.origin);
-
-      connection.on('message', (_message) => {
-        if (_message.type === 'utf8') {
+      connection.on("message", (_message) => {
+        if (_message.type === "utf8") {
           const message = _message as IUtf8Message;
           const requestMessage: IServerRequestMessage = JSON.parse(
             message.utf8Data
           );
 
-          if (requestMessage.type === 'message') {
+          if (requestMessage.type === "message") {
             this.sendMessageStatus(connection);
             this.clients.forEach((client) => {
               this.sendMessage(client, requestMessage.content);
             });
           }
 
-          if (requestMessage.type === 'userList') {
+          if (requestMessage.type === "userList") {
             this.sendUsers(connection);
           }
 
-          if (requestMessage.type === 'auth') {
+          if (requestMessage.type === "auth") {
             this.clients.push(connection);
             const userData: IUser = JSON.parse(requestMessage.content);
-            const authorisedUser: IAuthorisedUser = {connection, userData};
+            const authorisedUser: IAuthorisedUser = { connection, userData };
             this.authorisedUsers.push(authorisedUser);
             this.clients.forEach((client) => {
               this.sendUsers(client);
             });
             this.sendAuth(connection, userData);
           }
-          if (requestMessage.type === 'join') {
+          if (requestMessage.type === "join") {
             const joined = this.authorisedUsers.find((authorised) => {
               return authorised.connection === connection;
             });
-
             if (joined) {
               this.sendJoin(joined.connection);
               this.game.joinUser(joined.userData);
             }
             if (this.game.getPlayers() >= 1) {
-              this.game.joinUser({userName:'Bot'})
-              const bot= new BotController(this.game,'Bot')
+              this.game.joinUser({ userName: "Bot" });
+              const bot = new BotController(this.game, "Bot");
               this.game.startGame();
               this.game.onFinish = () => {
                 this.authorisedUsers.forEach((user) =>
-                  this.sendFinish(user.connection, '')
+                  this.sendFinish(user.connection, "")
                 );
               };
               this.authorisedUsers.forEach((user) => {
@@ -90,23 +88,26 @@ export class SocketService {
             //   });
             // }
           }
-          if (requestMessage.type === 'attack') {
+          if (requestMessage.type === "attack") {
             const authorised = this.authorisedUsers.find((authorised) => {
               return authorised.connection === connection;
             });
-            const controller= new PlayerController(this.game,authorised.userData.userName)
+            const controller = new PlayerController(
+              this.game,
+              authorised.userData.userName
+            );
             const attackParams: IAttackParams = JSON.parse(
               requestMessage.content
             );
-            controller.attack(attackParams.attackCard)
+            controller.attack(attackParams.attackCard);
             this.authorisedUsers.forEach((user) => {
               this.sendGameStatus(user.connection, this.game);
             });
-            controller.destroy()
+            controller.destroy();
           }
 
-          if (requestMessage.type === 'defend') {
-            console.log('def', requestMessage);
+          if (requestMessage.type === "defend") {
+            console.log("def", requestMessage);
             const authorised = this.authorisedUsers.find((authorised) => {
               return authorised.connection === connection;
             });
@@ -135,7 +136,7 @@ export class SocketService {
             });
           }
 
-          if (requestMessage.type === 'turn') {
+          if (requestMessage.type === "turn") {
             const authorised = this.authorisedUsers.find((authorised) => {
               return authorised.connection === connection;
             });
@@ -146,7 +147,7 @@ export class SocketService {
             });
           }
 
-          if (requestMessage.type === 'epicFail') {
+          if (requestMessage.type === "epicFail") {
             const authorised = this.authorisedUsers.find((authorised) => {
               return authorised.connection === connection;
             });
@@ -157,11 +158,11 @@ export class SocketService {
             });
           }
         } else {
-          throw new Error('Not utf8');
+          throw new Error("Not utf8");
         }
       });
 
-      connection.on('close', (reasonCode, description) => {
+      connection.on("close", (reasonCode, description) => {
         this.authorisedUsers = this.authorisedUsers.filter(
           (client) => client.connection !== connection
         );
@@ -171,7 +172,8 @@ export class SocketService {
           this.sendUsers(client);
         });
 
-        console.log('Client has disconnected.');
+        console.log("Client has disconnected.");
+        this.game.disconnectPlayer();
       });
     });
   }
@@ -179,22 +181,21 @@ export class SocketService {
   sendUsers(client: connection) {
     const userList = this.authorisedUsers.map((user) => ({
       userName: user.userData.userName,
-    }))
+    }));
 
-    this.sendResponse(client, 'userList', JSON.stringify(userList));
+    this.sendResponse(client, "userList", JSON.stringify(userList));
   }
 
   sendMessageStatus(client: connection) {
-    this.sendResponse(client, 'message-status', 'ok');
+    this.sendResponse(client, "message-status", "ok");
   }
 
   sendMessage(client: connection, message: string) {
-    this.sendResponse(client, 'message', message);
+    this.sendResponse(client, "message", message);
   }
 
   sendAuth(client: connection, user: IUser) {
-
-    this.sendResponse(client, 'auth', JSON.stringify(user));
+    this.sendResponse(client, "auth", JSON.stringify(user));
   }
 
   sendGameStatus(client: connection, game: Durak) {
@@ -202,19 +203,20 @@ export class SocketService {
       return authorised.connection === client;
     });
     if (!authorisedUser) return;
-    const gameStatus = game.getGameStatus(authorisedUser.userData.userName)
-    this.sendResponse(client, 'game', JSON.stringify(gameStatus));
+    const gameStatus = game.getGameStatus(authorisedUser.userData.userName);
+    this.sendResponse(client, "game", JSON.stringify(gameStatus));
   }
 
   sendFinish(client: connection, message: string) {
-    this.sendResponse(client, 'finish', message);
+    this.sendResponse(client, "finish", message);
   }
 
   sendJoin(client: connection) {
-    this.sendResponse(client, 'join', '');
+    this.sendResponse(client, "join", "");
   }
 
   sendResponse(client: connection, type: string, stringContenrt: string) {
+    console.log(type, "##Type");
     const responseMessage: IServerResponseMessage = {
       type: type,
       content: stringContenrt,

@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+.gamefield_layout{
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+  align-items: center;
+}
+.gamefield_top {
+  display: flex;
+  justify-content: space-between;
+}
+.gamefield_board{
+  display: flex;
+  width: 100vw;
+}
+.gamefield_player {
+  display: flex;
+  justify-content: center;
+}
