@@ -28,8 +28,7 @@ export const LobbyComponent = ({websocket}: {websocket: SocketModel}) => {
     <>
       {!isStarted && (
         <>
-          <LobbyFrom onClick={handleClick} />
-          <button onClick={() => websocket.join()}>join</button>
+          <LobbyFrom onClick={handleClick} websocket={websocket}/>
         </>
       )}
       {players && isStarted && (
