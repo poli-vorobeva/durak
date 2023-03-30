@@ -123,4 +123,21 @@ export class SocketModel {
 
     this.websocket.send(JSON.stringify(request));
   }
+
+  joinToRoom({player,room}:{ player: string,room:string }) {
+    const request: IServerRequestMessage = {
+      type: 'joinToRoom',
+      content: JSON.stringify({player,room}),
+    };
+    this.websocket.send(JSON.stringify(request));
+  }
+
+  leaveRoom(currentUser:string) {
+console.log('LEV')
+    const request: IServerRequestMessage = {
+      type: 'leaveToRoom',
+      content: currentUser,
+    };
+    this.websocket.send(JSON.stringify(request));
+  }
 }

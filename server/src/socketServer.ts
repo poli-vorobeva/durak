@@ -35,7 +35,6 @@ export class SocketService {
           const requestMessage: IServerRequestMessage = JSON.parse(
             message.utf8Data,
           );
-
           if (requestMessage.type === 'message') {
             this.sendMessageStatus(connection);
             this.clients.forEach((client) => {
@@ -46,8 +45,23 @@ export class SocketService {
           if (requestMessage.type === 'userList') {
             this.sendUsers(connection);
           }
-//todo if disconnect, delete from room, and if heis single in room
-          //delete room
+          if (requestMessage.type === 'joinToRoom') {
+            const { player, room }: { player: string, room: string } = JSON.parse(requestMessage.content);
+            this.rooms.joinToRoom({ player, room });
+            this.clients.forEach((client) => {
+              this.sendRooms(client);
+              this.sendUsers(client);
+            });
+          }
+          if (requestMessage.type === 'leaveToRoom') {
+            console.log('LEAVE')
+            const user = requestMessage.content;
+            this.rooms.deleteUserFromRoom(user)
+            this.clients.forEach((client) => {
+              this.sendRooms(client);
+              this.sendUsers(client);
+            });
+          }
           if (requestMessage.type === 'auth') {
             this.clients.push(connection);
             const userData: IUser = JSON.parse(requestMessage.content);
@@ -60,10 +74,10 @@ export class SocketService {
             this.sendAuth(connection, userData);
           }
           if (requestMessage.type === 'createRoom') {
-            console.log(requestMessage.content, '%%%^^createRoom');
             this.rooms.addRoom(requestMessage.content);
             this.authorisedUsers.forEach(user => {
               this.sendRooms(user.connection);
+              this.sendUsers(user.connection);
             });
             //userData.userName
           }
@@ -180,7 +194,7 @@ export class SocketService {
           (client) => client.connection !== connection,
         );
         this.clients = this.clients.filter((client) => client !== connection);
-        this.rooms.deleteUserFromRoom(currentUser.userData.userName);
+        this.rooms.deleteUserFromRoom(currentUser?.userData.userName);
         this.clients.forEach((client) => {
           this.sendUsers(client);
           this.sendRooms(client);
@@ -196,8 +210,9 @@ export class SocketService {
     const userList = this.authorisedUsers.map((user) => ({
       userName: user.userData.userName,
     }));
-
-    this.sendResponse(client, 'userList', JSON.stringify(userList));
+    const usersWithoutRooms = userList.filter(user => !this.rooms.isUserInRoom(user.userName));
+    console.log("usersWithoutRooms",usersWithoutRooms)
+    this.sendResponse(client, 'userList', JSON.stringify(usersWithoutRooms));
   }
 
   sendMessageStatus(client: connection) {
@@ -213,7 +228,7 @@ export class SocketService {
   }
 
   sendRooms(client: connection) {
-    console.log("ROOMS",this.rooms.rooms)
+    console.log('ROOMS', this.rooms.rooms);
     this.sendResponse(client, 'updateRooms', JSON.stringify(this.rooms.rooms));
   }
 
